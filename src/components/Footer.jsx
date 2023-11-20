@@ -1,13 +1,14 @@
 import React, { Component } from "react";
 
 class Footer extends Component {
-    render () {
-        return(
-            <div className="Footer">
-                <h1>Footer</h1>
-            </div>
-        )
-    }
+  render() {
+    return (
+      // Тимчасовий Footer - реалізувати потім
+      <footer>
+        <p>© 2023 Алло</p>
+      </footer>
+    );
+  }
 }
 
 export default Footer;

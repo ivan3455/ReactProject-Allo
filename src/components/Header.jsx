@@ -1,16 +1,27 @@
-import React from 'react';
-import LoginButton from './LoginButton'; // Імпорт компоненти LoginButton
+import React, { Component } from "react";
+import "../css/styles.css"; // Шлях до вашого CSS-файлу
 
-// Функціональний компонент -- Перетворити на класовий в майбутньому
-const Header = ({ isLoggedIn, handleLoginChange }) => { // Деструктеризуємо пропси
-  return (
-    <div className="Header">
-      {isLoggedIn ? <h2>Вітаємо!</h2> : <h2>Будь ласка, увійдіть в систему!</h2>}
+class Header extends Component {
+  render() {
+    const { selectedProducts } = this.props; // Отримання кількості обраних товарів з props
+    const { isLoggedIn } = this.props; // Отримання стану входу з props
 
-      { /*Передаємо метод-обробник входу виходу через пропси */}
-      <LoginButton onChange={handleLoginChange} />
-    </div>
-  );
-};
+    return (
+      <header>
+        <div className="container">
+          <img
+            src="https://becover.com.ua/upload/iblock/b3a/b3ab547b7eb5aa952e3841ff5547c7fe.jpg"
+            alt="Allo.ua Logo"
+          />
+        </div>
+
+        {/* Відображення кількості обраних товарів */}
+        <p>Обрано товарів: {selectedProducts}</p>
+        {/* Відображення стану входу\виходу користувача */}
+        <p>Стан: {isLoggedIn ? "Logged In" : "Logged Out"}</p>
+      </header>
+    );
+  }
+}
 
 export default Header;
