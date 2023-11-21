@@ -4,16 +4,18 @@ import Menu from "./Menu";
 import Footer from "./Footer";
 import Login from "./Login";
 import Product from "./Product";
+import ProductDetail from "./ProductDetail"; // Імпорт нового компонента
 
 class Body extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedProducts: new Array(props.products.length).fill(false), // Створення масиву для збереження стану кожного товару
+      selectedProducts: new Array(props.products.length).fill(false),
+      selectedProductIndex: null, // Стан для визначення обраного товару
     };
   }
 
-  // Функція для оновлення стану обраних товарів
+  // Оновлює стан selectedProducts з урахуванням обраного товару за індексом.
   updateSelectedProducts = (index, value) => {
     this.setState((prevState) => {
       const updatedSelectedProducts = [...prevState.selectedProducts];
@@ -22,37 +24,71 @@ class Body extends Component {
     });
   };
 
+  // Встановлює selectedProductIndex для показу деталей конкретного товару.
+  showProductDetail = (index) => {
+    this.setState({ selectedProductIndex: index });
+  };
+
   render() {
-    const { products } = this.props; // Отримання списку товарів з props
-    const { selectedProducts } = this.state; // Отримання стану обраних товарів
-    const { isLoggedIn, onLogin, onLogout } = this.props; // Отримання стану входу з props
+    const { products } = this.props;
+    const { selectedProducts, selectedProductIndex } = this.state;
+    const { isLoggedIn, onLogin, onLogout } = this.props;
+
+    if (selectedProductIndex !== null) {
+      return (
+        <div>
+          <Header
+            selectedProducts={selectedProducts.filter(Boolean).length}
+            isLoggedIn={isLoggedIn}
+          />
+          <Login
+            isLoggedIn={isLoggedIn}
+            onLogin={onLogin}
+            onLogout={onLogout}
+          />
+          <Menu />
+
+          {/* Відображення деталей обраного товару */}
+          <ProductDetail product={products[selectedProductIndex]} />
+
+          <button onClick={() => this.setState({ selectedProductIndex: null })}>
+            Назад
+          </button>
+
+          <Footer />
+        </div>
+      );
+    }
 
     return (
       <div>
-         {/* Відображення компонентів Header, Login, Menu, Footer */}
         <Header
-          selectedProducts={selectedProducts.filter(Boolean).length} // Відображення кількості обраних товарів у заголовку
-          isLoggedIn={isLoggedIn} // Передача стану входу у заголовок
+          selectedProducts={selectedProducts.filter(Boolean).length}
+          isLoggedIn={isLoggedIn}
+          onLogin={onLogin}
+          onLogout={onLogout}
         />
-        <Login isLoggedIn={isLoggedIn} onLogin={onLogin} onLogout={onLogout} /> {/* Відображення компоненти для входу/виходу */}
-        <Menu /> {/* Відображення меню */}
+        <Menu />
 
-        {/* Список товарів */}
         <div className="products-list">
           <h2>Список товарів</h2>
           {products.map((product, index) => (
-            <Product
-              key={index}
-              product={product} // Передача даних про кожен товар
-              checked={selectedProducts[index]} // Стан обраного товару
-              updateSelectedProducts={(value) =>
-                this.updateSelectedProducts(index, value)
-              } // Функція для оновлення стану обраного товару
-            />
+            <div key={index}>
+              <h3 onClick={() => this.showProductDetail(index)}>
+                {product.manufacturer} {product.model}
+              </h3>
+              <Product
+                product={product}
+                checked={selectedProducts[index]}
+                updateSelectedProducts={(value) =>
+                  this.updateSelectedProducts(index, value)
+                }
+              />
+            </div>
           ))}
         </div>
 
-        <Footer /> {/* Відображення нижньої частини сторінки */}
+        <Footer />
       </div>
     );
   }

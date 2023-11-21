@@ -19,7 +19,8 @@ class Product extends Component {
           onChange={this.handleCheckboxChange}
         />
         <span>
-          {manufacturer} {model} - Ціна: ${price} - Рейтинг: {rating} {/* Дані про товари */}
+          {manufacturer} {model} - Ціна: {price} - Рейтинг: {rating}{" "}
+          {/* Дані про товари */}
         </span>
       </div>
     );

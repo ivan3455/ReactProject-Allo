@@ -1,10 +1,9 @@
 import React, { Component } from "react";
-import "../css/styles.css"; // Шлях до вашого CSS-файлу
+import Login from "./Login"; // Імпорт компонента Login
 
 class Header extends Component {
   render() {
-    const { selectedProducts } = this.props; // Отримання кількості обраних товарів з props
-    const { isLoggedIn } = this.props; // Отримання стану входу з props
+    const { selectedProducts, isLoggedIn, onLogin, onLogout } = this.props;
 
     return (
       <header>
@@ -16,9 +15,12 @@ class Header extends Component {
         </div>
 
         {/* Відображення кількості обраних товарів */}
-        <p>Обрано товарів: {selectedProducts}</p>
-        {/* Відображення стану входу\виходу користувача */}
-        <p>Стан: {isLoggedIn ? "Logged In" : "Logged Out"}</p>
+        <span>
+          <p>Обрано товарів: {selectedProducts}</p>
+          {/* Відображення стану входу\виходу користувача */}
+          <p>Стан: {isLoggedIn ? "Logged In" : "Logged Out"}</p>
+          <Login isLoggedIn={isLoggedIn} onLogin={onLogin} onLogout={onLogout} />
+        </span>
       </header>
     );
   }

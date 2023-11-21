@@ -1,15 +1,15 @@
 import React, { Component } from "react";
 import Body from "./components/Body"; // Основний контент сайту
-import "./css/styles.css";
 
 class App extends Component {
   constructor(props) {
     super(props);
 
-     // Початковий стан для застосунку
+    // Початковий стан для застосунку
     this.state = {
       isLoggedIn: false, // Стан входу користувача
-      products: [ // Список товарів (тимчасове рішення)
+      products: [
+        // Список товарів (тимчасове рішення)
         {
           category: "Ноутбуки",
           manufacturer: "Lenovo",
@@ -56,6 +56,7 @@ class App extends Component {
 
   // Обробник події для виходу користувача
   handleLogout = () => {
+    // localStorage.clear();
     this.setState({ isLoggedIn: false });
   };
 
