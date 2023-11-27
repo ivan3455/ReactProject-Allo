@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Login from "./Login"; // Імпорт компонента Login
+import CityStatus from "./Hooks/CityStatus";  
 
 class Header extends Component {
   render() {
@@ -13,6 +14,9 @@ class Header extends Component {
             alt="Allo.ua Logo"
           />
         </div>
+
+        {/* Відображення хука для вибору міста */}
+        <CityStatus />
 
         {/* Відображення кількості обраних товарів */}
         <span>
