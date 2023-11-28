@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 
+// Відображає окремий товар у вигляді чекбокса та додаткової інформації про продукт.
 class Product extends Component {
   // Обробник події для зміни стану checkbox
   handleCheckboxChange = () => {
@@ -19,8 +20,8 @@ class Product extends Component {
           onChange={this.handleCheckboxChange}
         />
         <span>
-          {manufacturer} {model} - Ціна: {price} - Рейтинг: {rating}{" "}
           {/* Дані про товари */}
+          {manufacturer} {model} - Ціна: {price} - Рейтинг: {rating}{" "}
         </span>
       </div>
     );

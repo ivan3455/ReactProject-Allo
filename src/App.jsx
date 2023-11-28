@@ -56,7 +56,7 @@ class App extends Component {
 
   // Обробник події для виходу користувача
   handleLogout = () => {
-    // localStorage.clear();
+    // localStorage.clear(); - для очищення LocalStorage
     this.setState({ isLoggedIn: false });
   };
 

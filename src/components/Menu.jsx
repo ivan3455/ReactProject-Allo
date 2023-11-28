@@ -1,21 +1,24 @@
-import React, { Component } from "react";
+import React from "react";
+import { NavLink } from "react-router-dom";
 
-class Menu extends Component {
-  render() {
-    return (
-      <nav>
-        {/* Тимчасове меню - релізувати потім */}
-        <ul>
-          <li>
-            <a href="#">Пункт 1</a>
-          </li>
-          <li>
-            <a href="#">Пункт 2</a>
-          </li>
-        </ul>
-      </nav>
-    );
-  }
-}
+const Menu = () => {
+  return (
+    <nav>
+      <ul>
+        {/* Cтворення посилань */}
+        <li>
+          <NavLink to="/categories" activeClassName="active-link">
+            Категорії
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/user-info" activeClassName="active-link">
+            Аккаунт
+          </NavLink>
+        </li>
+      </ul>
+    </nav>
+  );
+};
 
 export default Menu;

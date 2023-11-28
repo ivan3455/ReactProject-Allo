@@ -1,16 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+
 import CommentConsoleStatus from "./Hooks/CommentConsoleStatus";
+import { UserContext } from "../user/UserContext";
 
 function ProductDetail({ product }) {
-  const [comments, setComments] = useState([]); // Стан для зберігання коментарів
-  const [newComment, setNewComment] = useState(""); // Стан для нового коментаря
-  const [userName, setUserName] = useState(""); // Стан для імені користувача
-  const [addingComment, setAddingComment] = useState(false); // Стан відслідковування додавання коментаря
+  const { loggedInUser } = useContext(UserContext); // Отримання доступу до контексту користувача.
 
-  // Використання хука для виведення в консоль
+  const [comments, setComments] = useState([]);
+
+  // Створення станів.
+  const [newComment, setNewComment] = useState("");
+  const [userName, setUserName] = useState(loggedInUser || "");
+  const [addingComment, setAddingComment] = useState(false);
+
+  // Виклик функції зовнішнього хука для відображення даних про новий коментар в консолі.
   CommentConsoleStatus(comments, addingComment);
 
-  // Викликається при завантаженні компоненту або при зміні product.model
+  // Отримання коментарів з localStorage на основі product.model.
   useEffect(() => {
     const savedComments =
       JSON.parse(localStorage.getItem(`comments_${product.model}`)) || [];
@@ -22,23 +28,26 @@ function ProductDetail({ product }) {
   };
 
   const handleNameChange = (e) => {
-    setUserName(e.target.value);
+    // Якщо юзер не залогінений то поле буде доступне для вводу
+    if (!loggedInUser) {
+      setUserName(e.target.value);
+    }
   };
 
   const handleAddComment = () => {
-    // Додавання нового коментаря до списку коментарів
     if (newComment.trim() !== "" && userName.trim() !== "") {
+      // Додавання коментаря до списку, збереження в localStorage.
       const updatedComments = [
         ...comments,
         { name: userName, comment: newComment },
       ];
-      // Оновлення станів
       setComments(updatedComments);
       setNewComment("");
-      setUserName("");
+      if (!loggedInUser) {
+        setUserName("");
+      }
       setAddingComment(true);
 
-      // Збереження коментарів у локальному сховищі
       localStorage.setItem(
         `comments_${product.model}`,
         JSON.stringify(updatedComments)
@@ -48,6 +57,7 @@ function ProductDetail({ product }) {
 
   return (
     <div className="product-detail">
+      {/* Відображення деталей продукту */}
       <h2>
         {product.manufacturer} {product.model}
       </h2>
@@ -62,10 +72,17 @@ function ProductDetail({ product }) {
           </li>
         ))}
       </ul>
+
+      {/* Форма для введення коментаря */}
       <form onSubmit={(e) => e.preventDefault()}>
         <label>
           Ім'я:
-          <input type="text" value={userName} onChange={handleNameChange} />
+          <input
+            type="text"
+            value={userName}
+            onChange={handleNameChange}
+            readOnly={loggedInUser}
+          />
         </label>
 
         <label>

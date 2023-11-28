@@ -2,10 +2,14 @@ import React, { Component } from "react";
 import Header from "./Header";
 import Menu from "./Menu";
 import Footer from "./Footer";
-import Login from "./Login";
 import Product from "./Product";
-import ProductDetail from "./ProductDetail"; // Імпорт нового компонента
+import ProductDetail from "./ProductDetail";
+import { UserProvider } from "../user/UserContext";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import User from "./User";
+import Categories from "./Categories";
 
+//  Відображення та управління основною частиною сторінки - дані про товари
 class Body extends Component {
   constructor(props) {
     super(props);
@@ -32,64 +36,83 @@ class Body extends Component {
   render() {
     const { products } = this.props;
     const { selectedProducts, selectedProductIndex } = this.state;
-    const { isLoggedIn, onLogin, onLogout } = this.props;
+    const { onLogin, onLogout } = this.props;
 
-    if (selectedProductIndex !== null) {
-      return (
-        <div>
-          <Header
-            selectedProducts={selectedProducts.filter(Boolean).length}
-            isLoggedIn={isLoggedIn}
-          />
-          <Login
-            isLoggedIn={isLoggedIn}
-            onLogin={onLogin}
-            onLogout={onLogout}
-          />
-          <Menu />
-
-          {/* Відображення деталей обраного товару */}
-          <ProductDetail product={products[selectedProductIndex]} />
-
-          <button onClick={() => this.setState({ selectedProductIndex: null })}>
-            Назад
-          </button>
-
-          <Footer />
-        </div>
-      );
-    }
-
+    // Роутер React Router відображає різний контент в залежності від шляху у браузері.
     return (
-      <div>
-        <Header
-          selectedProducts={selectedProducts.filter(Boolean).length}
-          isLoggedIn={isLoggedIn}
-          onLogin={onLogin}
-          onLogout={onLogout}
-        />
-        <Menu />
+      <UserProvider>
+        <BrowserRouter>
+          <div>
+            <Routes>
+              <Route path="/user-info" element={<User />} />
+              <Route path="/categories" element={<Categories />} />
+              {selectedProductIndex !== null ? (
+                <Route
+                  path="/"
+                  element={
+                    <>
+                      <Header
+                        selectedProducts={
+                          selectedProducts.filter(Boolean).length
+                        }
+                      />
+                      <Menu />
 
-        <div className="products-list">
-          <h2>Список товарів</h2>
-          {products.map((product, index) => (
-            <div key={index}>
-              <h3 onClick={() => this.showProductDetail(index)}>
-                {product.manufacturer} {product.model}
-              </h3>
-              <Product
-                product={product}
-                checked={selectedProducts[index]}
-                updateSelectedProducts={(value) =>
-                  this.updateSelectedProducts(index, value)
-                }
-              />
-            </div>
-          ))}
-        </div>
+                      {/* Відображення деталей обраного товару */}
+                      <ProductDetail product={products[selectedProductIndex]} />
 
-        <Footer />
-      </div>
+                      <button
+                        onClick={() =>
+                          this.setState({ selectedProductIndex: null })
+                        }
+                      >
+                        Назад
+                      </button>
+
+                      <Footer />
+                    </>
+                  }
+                />
+              ) : (
+                <Route
+                  path="/"
+                  element={
+                    <>
+                      <Header
+                        selectedProducts={
+                          selectedProducts.filter(Boolean).length
+                        }
+                        onLogin={onLogin}
+                        onLogout={onLogout}
+                      />
+                      <Menu />
+
+                      <div className="products-list">
+                        <h2>Список товарів</h2>
+                        {products.map((product, index) => (
+                          <div key={index}>
+                            <h3 onClick={() => this.showProductDetail(index)}>
+                              {product.manufacturer} {product.model}
+                            </h3>
+                            <Product
+                              product={product}
+                              checked={selectedProducts[index]}
+                              updateSelectedProducts={(value) =>
+                                this.updateSelectedProducts(index, value)
+                              }
+                            />
+                          </div>
+                        ))}
+                      </div>
+                      <Footer />
+                    </>
+                  }
+                />
+              )}
+            </Routes>
+          </div>
+        </BrowserRouter>
+      </UserProvider>
     );
   }
 }
