@@ -2,10 +2,11 @@ import React, { useContext } from "react";
 import CityStatus from "./Hooks/CityStatus";
 import { UserContext } from "../user/UserContext";
 import Login from "./Login";
+import "../css/header.css"; // Імпортуємо файли стилів
 
 // Верхня частина сторінки - логотип, вибір міста, кількість обраних товарів та інформація про користувача
 const Header = ({ selectedProducts }) => {
-  // Отримання статусу входу користувача
+  // Отримання статусу входу користувача із контексту
   const { loggedInUser } = useContext(UserContext);
 
   return (
@@ -25,6 +26,7 @@ const Header = ({ selectedProducts }) => {
         <p>Обрано товарів: {selectedProducts}</p>
         {/* Відображення стану входу\виходу користувача */}
         <p>Користувач: {loggedInUser || "Гість"}</p>
+        {/* Відображення компоненти для входу\виходу */}
         <Login />
       </span>
     </header>

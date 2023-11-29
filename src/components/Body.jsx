@@ -8,6 +8,7 @@ import { UserProvider } from "../user/UserContext";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import User from "./User";
 import Categories from "./Categories";
+import "../css/body.css";
 
 //  Відображення та управління основною частиною сторінки - дані про товари
 class Body extends Component {
@@ -22,6 +23,7 @@ class Body extends Component {
   // Оновлює стан selectedProducts з урахуванням обраного товару за індексом.
   updateSelectedProducts = (index, value) => {
     this.setState((prevState) => {
+      // localStorage.clear();
       const updatedSelectedProducts = [...prevState.selectedProducts];
       updatedSelectedProducts[index] = value;
       return { selectedProducts: updatedSelectedProducts };
@@ -87,8 +89,8 @@ class Body extends Component {
                       />
                       <Menu />
 
+                      <h2>Список товарів</h2>
                       <div className="products-list">
-                        <h2>Список товарів</h2>
                         {products.map((product, index) => (
                           <div key={index}>
                             <h3 onClick={() => this.showProductDetail(index)}>

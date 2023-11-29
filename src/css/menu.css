@@ -1,0 +1,36 @@
+.menu {
+  background-color: rgb(255, 29, 29);
+  display: flex;
+  width: 100%;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.menu-list {
+  display: flex;
+  list-style-type: none;
+  padding: 0;
+}
+
+.menu-item {
+  margin: 0 10px;
+}
+
+.menu-link {
+  color: black;
+  padding: 5px 10px;
+  border-radius: 10px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  /* перехід для зміни кольору тексту */
+  border: 2px solid transparent;
+}
+
+.menu-link:hover {
+  background-color: white;
+  color: black;
+  /* Зміна кольору тексту при наведенні на чорний */
+}
+
+.active-link {
+  font-weight: bold;
+}

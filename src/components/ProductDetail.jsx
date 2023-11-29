@@ -2,6 +2,8 @@ import React, { useState, useEffect, useContext } from "react";
 
 import CommentConsoleStatus from "./Hooks/CommentConsoleStatus";
 import { UserContext } from "../user/UserContext";
+import { Modal, Input, Button } from "antd";
+import "../css/productDetail.css"; // Імпорт CSS для стилізації компонента
 
 function ProductDetail({ product }) {
   const { loggedInUser } = useContext(UserContext); // Отримання доступу до контексту користувача.
@@ -13,6 +15,8 @@ function ProductDetail({ product }) {
   const [userName, setUserName] = useState(loggedInUser || "");
   const [addingComment, setAddingComment] = useState(false);
 
+  const [isModalVisible, setIsModalVisible] = useState(false); // Стан для відображення/приховання модального вікна
+
   // Виклик функції зовнішнього хука для відображення даних про новий коментар в консолі.
   CommentConsoleStatus(comments, addingComment);
 
@@ -23,15 +27,17 @@ function ProductDetail({ product }) {
     setComments(savedComments);
   }, [product.model]);
 
+  useEffect(() => {
+    setUserName(loggedInUser || ""); // Встановлюємо userName, якщо він є в контексті
+  }, [loggedInUser]);
+
   const handleCommentChange = (e) => {
     setNewComment(e.target.value);
   };
 
   const handleNameChange = (e) => {
     // Якщо юзер не залогінений то поле буде доступне для вводу
-    if (!loggedInUser) {
-      setUserName(e.target.value);
-    }
+    setUserName(e.target.value);
   };
 
   const handleAddComment = () => {
@@ -55,6 +61,20 @@ function ProductDetail({ product }) {
     }
   };
 
+  // Методи для відкриття/закриття модального вікна та додавання коментаря
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleOk = () => {
+    handleAddComment();
+    setIsModalVisible(false);
+  };
+
   return (
     <div className="product-detail">
       {/* Відображення деталей продукту */}
@@ -73,30 +93,29 @@ function ProductDetail({ product }) {
         ))}
       </ul>
 
-      {/* Форма для введення коментаря */}
-      <form onSubmit={(e) => e.preventDefault()}>
-        <label>
-          Ім'я:
-          <input
-            type="text"
-            value={userName}
-            onChange={handleNameChange}
-            readOnly={loggedInUser}
-          />
-        </label>
+      {/* Модальне вікно з ant-design компонентами всередині */}
+      <Button type="primary" onClick={showModal}>
+        Додати коментар
+      </Button>
 
-        <label>
-          Додати коментар:
-          <input
-            type="text"
-            value={newComment}
-            onChange={handleCommentChange}
-          />
-        </label>
-        <button type="button" onClick={handleAddComment}>
-          Додати
-        </button>
-      </form>
+      <Modal
+        title="Додати коментар"
+        visible={isModalVisible}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        <Input
+          value={userName}
+          onChange={handleNameChange}
+          placeholder="Ім'я"
+          disabled={loggedInUser}
+        />
+        <Input.TextArea
+          value={newComment}
+          onChange={handleCommentChange}
+          placeholder="Додати коментар"
+        />
+      </Modal>
     </div>
   );
 }

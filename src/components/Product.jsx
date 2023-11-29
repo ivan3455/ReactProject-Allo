@@ -1,31 +1,33 @@
-import React, { Component } from "react";
+import React from "react";
+import { CSSTransition } from "react-transition-group";
+import '../css/product.css'; // Імпорт CSS для стилізації компонента
 
-// Відображає окремий товар у вигляді чекбокса та додаткової інформації про продукт.
-class Product extends Component {
-  // Обробник події для зміни стану checkbox
-  handleCheckboxChange = () => {
-    const { checked, updateSelectedProducts } = this.props; // Отримання даних з props
-    updateSelectedProducts(!checked); // Виклик функції updateSelectedProducts зі зміненим значенням checked
+const Product = ({ product, checked, updateSelectedProducts }) => {
+  const { manufacturer, model, price, rating } = product;
+
+  const handleCheckboxChange = () => {
+    updateSelectedProducts(!checked);
   };
 
-  render() {
-    const { product, checked } = this.props; // Отримання даних з props
-    const { manufacturer, model, price, rating } = product; // Деструктуризація об'єкта product
-
-    return (
-      <div className="product-item">
-        <input
-          type="checkbox"
-          checked={checked}
-          onChange={this.handleCheckboxChange}
-        />
-        <span>
-          {/* Дані про товари */}
-          {manufacturer} {model} - Ціна: {price} - Рейтинг: {rating}{" "}
-        </span>
+  return (
+    <CSSTransition in={true} appear={true} timeout={300} classNames="product">
+      <div className="product-container">
+        <div className="product-item">
+          <label className="product-checkbox">
+            <input
+              type="checkbox"
+              checked={checked}
+              onChange={handleCheckboxChange}
+            />
+            <span className="checkmark"></span>
+          </label>
+          <span>
+            {manufacturer} {model} - Ціна: {price} - Рейтинг: {rating}
+          </span>
+        </div>
       </div>
-    );
-  }
-}
+    </CSSTransition>
+  );
+};
 
 export default Product;

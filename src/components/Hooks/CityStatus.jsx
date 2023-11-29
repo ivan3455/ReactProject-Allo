@@ -1,7 +1,9 @@
 import React, { useState } from "react";
+import { Modal } from "antd";
+import { CSSTransition } from "react-transition-group";
+import "../../css/cityStatus.css"; // Стилі для анімації
 
 function CityStatus() {
-  // Масив міст, які будуть відображатися у випадаючому списку
   const cities = [
     "Київ",
     "Харків",
@@ -19,27 +21,55 @@ function CityStatus() {
     "Черкаси",
   ];
 
-  // Стан, що містить обране місто. Встановлюється по замовчуванню як 'Київ'.
-  const [selectedCity, setSelectedCity] = useState("Київ"); // Місто за замовчуванням
+  const [selectedCity, setSelectedCity] = useState("Київ");
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
-  // Обробник події для зміни вибраного міста
-  const handleCityChange = (e) => {
-    setSelectedCity(e.target.value); // Встановлює нове обране місто при зміні вибору у випадаючому списку
+  const handleCityChange = (city) => {
+    setSelectedCity(city);
+    setIsModalVisible(false);
+  };
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
   };
 
   return (
     <div>
-      <label>
-        Оберіть місто:
-        {/* Випадаючий список для вибору міста */}
-        <select value={selectedCity} onChange={handleCityChange}>
-          {cities.map((city, index) => (
-            <option key={index} value={city}>
-              {city}
-            </option>
-          ))}
-        </select>
-      </label>
+      <div className="city-label" onClick={showModal}>
+        Змінити місто
+      </div>
+      {/* Використання CSSTransition з бібліотеки react-transition-group для створення анімації появи модального вікна */}
+      <CSSTransition
+        in={isModalVisible}
+        timeout={300}
+        classNames="fade"
+        unmountOnExit
+      >
+        {/* Модальне вікно з ant-design компонентами всередині */}
+        <Modal
+          title="Виберіть місто"
+          visible={isModalVisible}
+          onCancel={handleCancel}
+          footer={null} // Прибираємо футер з кнопками
+          closable={false} // Прибираємо кнопку закриття
+        >
+          <div>
+            {cities.map((city, index) => (
+              <div
+                key={index}
+                onClick={() => handleCityChange(city)}
+                className="city-option"
+              >
+                {city}
+              </div>
+            ))}
+          </div>
+        </Modal>
+      </CSSTransition>
       <p>Ваше місто: {selectedCity}</p>
     </div>
   );

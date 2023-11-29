@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Body from "./components/Body"; // Основний контент сайту
+import "./css/app.css";
 
 class App extends Component {
   constructor(props) {
@@ -45,6 +46,13 @@ class App extends Component {
           price: 18999,
           rating: 4.6,
         },
+        {
+          category: "Телефони",
+          manufacturer: "Xiaomi",
+          model: "Mi 12",
+          price: 12999,
+          rating: 4.3,
+        },
       ],
     };
   }
@@ -56,7 +64,6 @@ class App extends Component {
 
   // Обробник події для виходу користувача
   handleLogout = () => {
-    // localStorage.clear(); - для очищення LocalStorage
     this.setState({ isLoggedIn: false });
   };
 
